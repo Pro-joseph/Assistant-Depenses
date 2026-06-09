@@ -13,7 +13,7 @@ class RecuController extends Controller
      */
     public function index()
     {
-        //
+        return view('recus.index');
     }
 
     /**
@@ -21,7 +21,7 @@ class RecuController extends Controller
      */
     public function create()
     {
-        //
+        return view('recus.create');
     }
 
     /**
@@ -37,7 +37,7 @@ class RecuController extends Controller
      */
     public function show(Recu $recu)
     {
-        //
+        return view('recus.show', compact('recu'));
     }
 
     /**
