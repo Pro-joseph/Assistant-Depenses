@@ -11,10 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recus', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+            Schema::create('recus', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+        $table->text('texte_brut')->nullable();
+        $table->string('image_path')->nullable();
+        $table->enum('statut', ['en_attente', 'traite', 'echoue'])->default('en_attente');
+        $table->json('payload_brut')->nullable();
+        $table->decimal('total_estime', 10, 2)->nullable();
+        $table->string('devise', 10)->nullable();
+        $table->timestamps();
+    });
     }
 
     /**

@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('depenses', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+            Schema::create('depenses', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('recu_id')->constrained('recus')->cascadeOnDelete();
+                $table->string('libelle');
+                $table->unsignedInteger('quantite');
+                $table->decimal('prix_unitaire', 10, 2);
+                $table->enum('categorie', ['alimentaire', 'boissons', 'hygiene', 'entretien', 'autre']);
+                $table->timestamps();
+            });
     }
 
     /**
