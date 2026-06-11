@@ -23,7 +23,8 @@ class StoreRecuRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'texte_brut' => ['nullable', 'string', 'max:10000', 'required_without:image'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240', 'required_without:texte_brut'],
         ];
     }
 }
