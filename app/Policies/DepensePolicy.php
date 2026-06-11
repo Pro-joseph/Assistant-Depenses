@@ -13,7 +13,7 @@ class DepensePolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class DepensePolicy
      */
     public function view(User $user, Depense $depense): bool
     {
-        return false;
+        return $user->id === $depense->recu->user_id;
     }
 
     /**

@@ -3,64 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Models\Depense;
-use App\Http\Requests\StoreDepenseRequest;
-use App\Http\Requests\UpdateDepenseRequest;
+use Illuminate\Support\Facades\DB;
 
 class DepenseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return view('depenses.index');
-    }
+        $this->authorize('viewAny', Depense::class);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $query = Depense::whereHas('recu', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->with('recu');
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreDepenseRequest $request)
-    {
-        //
-    }
+        if ($categorie = request('categorie')) {
+            $query->categorie($categorie);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Depense $depense)
-    {
-        //
-    }
+        if ($search = request('q')) {
+            $query->search($search);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Depense $depense)
-    {
-        //
-    }
+        $depenses = $query->latest('depenses.created_at')->paginate(15);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateDepenseRequest $request, Depense $depense)
-    {
-        //
-    }
+        $totalMois = Depense::whereHas('recu', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->whereMonth('depenses.created_at', now()->month)
+          ->sum(DB::raw('quantite * prix_unitaire'));
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Depense $depense)
-    {
-        //
+        $categorieStats = Depense::whereHas('recu', function ($q) {
+            $q->where('user_id', auth()->id());
+        })->select('categorie', DB::raw('SUM(quantite * prix_unitaire) as total'))
+          ->groupBy('categorie')
+          ->orderByDesc('total')
+          ->get();
+
+        $dominante = $categorieStats->first();
+        $totalGlobal = $categorieStats->sum('total');
+        $pourcentageDominante = $totalGlobal > 0 ? round(($dominante->total / $totalGlobal) * 100) : 0;
+
+        return view('depenses.index', compact(
+            'depenses', 'totalMois', 'categorieStats', 'dominante', 'totalGlobal', 'pourcentageDominante'
+        ));
     }
 }

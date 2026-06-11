@@ -54,10 +54,10 @@
                 <div class="flex items-center gap-lg">
                     <h2 class="text-xl font-bold text-primary">@yield('page-title', 'Assistant Dépenses')</h2>
                     @hasSection('search')
-                        <div class="hidden md:flex bg-surface-container-high rounded-full px-md py-xs items-center gap-sm border border-outline-variant">
+                        <form method="GET" action="{{ url()->current() }}" class="hidden md:flex bg-surface-container-high rounded-full px-md py-xs items-center gap-sm border border-outline-variant">
                             <span class="material-symbols-outlined text-outline text-sm">search</span>
-                            <input class="bg-transparent border-none focus:ring-0 text-sm w-64" type="text" placeholder="@yield('search-placeholder', 'Rechercher...')"/>
-                        </div>
+                            <input class="bg-transparent border-none focus:ring-0 text-sm w-64" type="text" name="q" value="{{ request('q') }}" placeholder="@yield('search-placeholder', 'Rechercher...')"/>
+                        </form>
                     @endif
                 </div>
                 <div class="flex items-center gap-md">
