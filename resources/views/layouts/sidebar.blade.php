@@ -48,7 +48,7 @@
         </div>
     </aside>
 
-    <main class="ml-64 min-h-screen">
+    <main class="ms-64 min-h-screen">
         <header class="sticky top-0 bg-surface-container-lowest border-b border-outline-variant shadow-sm z-40">
             <div class="flex justify-between items-center px-lg py-sm max-w-[1440px] mx-auto">
                 <div class="flex items-center gap-lg">

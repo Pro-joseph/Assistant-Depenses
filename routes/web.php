@@ -6,6 +6,9 @@ use App\Http\Controllers\RecuController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('recus.index');
+    }
     return view('welcome');
 });
 

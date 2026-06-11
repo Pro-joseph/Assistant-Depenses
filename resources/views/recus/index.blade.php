@@ -55,14 +55,14 @@
             </div>
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+            <table class="w-full text-start border-collapse">
                 <thead>
                     <tr class="bg-surface-container/30">
                         <th class="px-lg py-md text-xs text-outline uppercase tracking-wider font-medium">Date</th>
                         <th class="px-lg py-md text-xs text-outline uppercase tracking-wider font-medium">Référence / Nom</th>
                         <th class="px-lg py-md text-xs text-outline uppercase tracking-wider font-medium">Statut</th>
                         <th class="px-lg py-md text-xs text-outline uppercase tracking-wider font-medium">Dépenses</th>
-                        <th class="px-lg py-md text-xs text-outline uppercase tracking-wider font-medium text-right">Actions</th>
+                        <th class="px-lg py-md text-xs text-outline uppercase tracking-wider font-medium text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-outline-variant">
@@ -71,11 +71,11 @@
                         <td class="px-lg py-md text-sm font-medium text-primary">Restaurant Le Gourmet</td>
                         <td class="px-lg py-md">
                             <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-green-100 text-green-700 border-green-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span> Traité
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 me-2"></span> Traité
                             </span>
                         </td>
                         <td class="px-lg py-md text-sm text-on-surface-variant">2 dépenses</td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <div class="flex justify-end gap-md opacity-0 group-hover:opacity-100 transition-opacity">
                                 <a href="{{ route('recus.show', 1) }}" class="text-primary hover:text-secondary flex items-center gap-xs text-xs font-medium uppercase">
                                     <span class="material-symbols-outlined text-[18px]">visibility</span> Voir
@@ -91,11 +91,11 @@
                         <td class="px-lg py-md text-sm font-medium text-primary">Apple Store Paris</td>
                         <td class="px-lg py-md">
                             <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-amber-100 text-amber-700 border-amber-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-2"></span> En attente
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 me-2"></span> En attente
                             </span>
                         </td>
                         <td class="px-lg py-md text-sm text-on-surface-variant">1 dépense</td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <div class="flex justify-end gap-md opacity-0 group-hover:opacity-100 transition-opacity">
                                 <a href="{{ route('recus.show', 2) }}" class="text-primary hover:text-secondary flex items-center gap-xs text-xs font-medium uppercase">
                                     <span class="material-symbols-outlined text-[18px]">visibility</span> Voir
@@ -111,11 +111,11 @@
                         <td class="px-lg py-md text-sm font-medium text-primary">Station Service Shell</td>
                         <td class="px-lg py-md">
                             <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-red-100 text-red-700 border-red-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span> Échoué
+                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 me-2"></span> Échoué
                             </span>
                         </td>
                         <td class="px-lg py-md text-sm text-on-surface-variant">0 dépense</td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <div class="flex justify-end gap-md opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button class="text-primary hover:text-secondary flex items-center gap-xs text-xs font-medium uppercase">
                                     <span class="material-symbols-outlined text-[18px]">autorenew</span> Réessayer
@@ -131,11 +131,11 @@
                         <td class="px-lg py-md text-sm font-medium text-primary">Uber Trip - Business</td>
                         <td class="px-lg py-md">
                             <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-green-100 text-green-700 border-green-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span> Traité
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 me-2"></span> Traité
                             </span>
                         </td>
                         <td class="px-lg py-md text-sm text-on-surface-variant">1 dépense</td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <div class="flex justify-end gap-md opacity-0 group-hover:opacity-100 transition-opacity">
                                 <a href="{{ route('recus.show', 4) }}" class="text-primary hover:text-secondary flex items-center gap-xs text-xs font-medium uppercase">
                                     <span class="material-symbols-outlined text-[18px]">visibility</span> Voir
@@ -151,11 +151,11 @@
                         <td class="px-lg py-md text-sm font-medium text-primary">Hôtel Mercure Lyon</td>
                         <td class="px-lg py-md">
                             <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-green-100 text-green-700 border-green-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span> Traité
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 me-2"></span> Traité
                             </span>
                         </td>
                         <td class="px-lg py-md text-sm text-on-surface-variant">4 dépenses</td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <div class="flex justify-end gap-md opacity-0 group-hover:opacity-100 transition-opacity">
                                 <a href="{{ route('recus.show', 5) }}" class="text-primary hover:text-secondary flex items-center gap-xs text-xs font-medium uppercase">
                                     <span class="material-symbols-outlined text-[18px]">visibility</span> Voir

@@ -46,14 +46,14 @@
 
     <div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full border-collapse text-left">
+            <table class="w-full border-collapse text-start">
                 <thead>
                     <tr class="bg-surface-container border-b border-outline-variant">
                         <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium">Libellé</th>
                         <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium">Catégorie</th>
-                        <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium text-right">Quantité</th>
-                        <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium text-right">Prix Unitaire</th>
-                        <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium text-right">Total</th>
+                        <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium text-end">Quantité</th>
+                        <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium text-end">Prix Unitaire</th>
+                        <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium text-end">Total</th>
                         <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium">Reçu Source</th>
                         <th class="px-lg py-md text-xs text-on-surface-variant uppercase tracking-wider font-medium w-16"></th>
                     </tr>
@@ -72,16 +72,16 @@
                                 Alimentaire
                             </span>
                         </td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">1</td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">45,90 €</td>
-                        <td class="px-lg py-md text-right text-base font-bold text-primary">45,90 €</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">1</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">45,90 €</td>
+                        <td class="px-lg py-md text-end text-base font-bold text-primary">45,90 €</td>
                         <td class="px-lg py-md">
                             <a href="{{ route('recus.show', 1) }}" class="flex items-center gap-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
                                 <span class="material-symbols-outlined">description</span>
                                 <span class="text-xs underline">RECU_1289.pdf</span>
                             </a>
                         </td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <button class="opacity-0 group-hover:opacity-100 transition-opacity p-xs hover:bg-surface-container-high rounded-full">
                                 <span class="material-symbols-outlined text-outline">more_vert</span>
                             </button>
@@ -100,16 +100,16 @@
                                 Boissons
                             </span>
                         </td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">3</td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">12,50 €</td>
-                        <td class="px-lg py-md text-right text-base font-bold text-primary">37,50 €</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">3</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">12,50 €</td>
+                        <td class="px-lg py-md text-end text-base font-bold text-primary">37,50 €</td>
                         <td class="px-lg py-md">
                             <a href="{{ route('recus.show', 2) }}" class="flex items-center gap-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
                                 <span class="material-symbols-outlined">description</span>
                                 <span class="text-xs underline">RECU_4412.jpg</span>
                             </a>
                         </td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <button class="opacity-0 group-hover:opacity-100 transition-opacity p-xs hover:bg-surface-container-high rounded-full">
                                 <span class="material-symbols-outlined text-outline">more_vert</span>
                             </button>
@@ -128,16 +128,16 @@
                                 Transport
                             </span>
                         </td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">1</td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">22,40 €</td>
-                        <td class="px-lg py-md text-right text-base font-bold text-primary">22,40 €</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">1</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">22,40 €</td>
+                        <td class="px-lg py-md text-end text-base font-bold text-primary">22,40 €</td>
                         <td class="px-lg py-md">
                             <a href="{{ route('recus.show', 3) }}" class="flex items-center gap-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
                                 <span class="material-symbols-outlined">description</span>
                                 <span class="text-xs underline">RECU_Uber_88.pdf</span>
                             </a>
                         </td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <button class="opacity-0 group-hover:opacity-100 transition-opacity p-xs hover:bg-surface-container-high rounded-full">
                                 <span class="material-symbols-outlined text-outline">more_vert</span>
                             </button>
@@ -156,16 +156,16 @@
                                 Shopping
                             </span>
                         </td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">1</td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">329,00 €</td>
-                        <td class="px-lg py-md text-right text-base font-bold text-primary">329,00 €</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">1</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">329,00 €</td>
+                        <td class="px-lg py-md text-end text-base font-bold text-primary">329,00 €</td>
                         <td class="px-lg py-md">
                             <a href="{{ route('recus.show', 4) }}" class="flex items-center gap-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
                                 <span class="material-symbols-outlined">description</span>
                                 <span class="text-xs underline">AMZN_INV_331.pdf</span>
                             </a>
                         </td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <button class="opacity-0 group-hover:opacity-100 transition-opacity p-xs hover:bg-surface-container-high rounded-full">
                                 <span class="material-symbols-outlined text-outline">more_vert</span>
                             </button>
@@ -184,16 +184,16 @@
                                 Autre
                             </span>
                         </td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">1</td>
-                        <td class="px-lg py-md text-right text-sm text-on-surface">19,99 €</td>
-                        <td class="px-lg py-md text-right text-base font-bold text-primary">19,99 €</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">1</td>
+                        <td class="px-lg py-md text-end text-sm text-on-surface">19,99 €</td>
+                        <td class="px-lg py-md text-end text-base font-bold text-primary">19,99 €</td>
                         <td class="px-lg py-md">
                             <a href="{{ route('recus.show', 5) }}" class="flex items-center gap-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
                                 <span class="material-symbols-outlined">description</span>
                                 <span class="text-xs underline">SUB_INV_902.pdf</span>
                             </a>
                         </td>
-                        <td class="px-lg py-md text-right">
+                        <td class="px-lg py-md text-end">
                             <button class="opacity-0 group-hover:opacity-100 transition-opacity p-xs hover:bg-surface-container-high rounded-full">
                                 <span class="material-symbols-outlined text-outline">more_vert</span>
                             </button>
