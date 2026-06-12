@@ -1,9 +1,11 @@
 <?php
 
 use App\Enums\StatutRecu;
+use App\Jobs\ExtraireDepensesDuRecu;
 use App\Models\Recu;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
@@ -135,6 +137,8 @@ test('user cannot edit another users recu', function () {
 });
 
 test('user can update their own recu text', function () {
+    Bus::fake();
+
     $recu = Recu::factory()->for($this->user)->create([
         'texte_brut' => 'Original text',
         'statut' => 'traite',
@@ -149,12 +153,18 @@ test('user can update their own recu text', function () {
     $recu->refresh();
     expect($recu->texte_brut)->toBe('Updated text');
     expect($recu->statut)->toBe(StatutRecu::EnAttente);
+
+    Bus::assertDispatched(ExtraireDepensesDuRecu::class, fn ($job) => $job->recu->id === $recu->id);
 });
 
 test('user can update their own recu image', function () {
     Storage::fake('public');
+    Bus::fake();
 
-    $recu = Recu::factory()->for($this->user)->create();
+    $recu = Recu::factory()->for($this->user)->create([
+        'texte_brut' => 'Some text',
+        'statut' => StatutRecu::Traite,
+    ]);
     $file = UploadedFile::fake()->image('new-receipt.jpg');
 
     $this->actingAs($this->user)
@@ -165,7 +175,11 @@ test('user can update their own recu image', function () {
 
     $recu->refresh();
     expect($recu->image_path)->not->toBeNull();
+    expect($recu->texte_brut)->toBeNull();
+    expect($recu->statut)->toBe(StatutRecu::EnAttente);
     Storage::disk('public')->assertExists($recu->image_path);
+
+    Bus::assertDispatched(ExtraireDepensesDuRecu::class, fn ($job) => $job->recu->id === $recu->id);
 });
 
 test('user cannot update another users recu', function () {

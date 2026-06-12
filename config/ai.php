@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'openai',
+    'default' => env('AI_DEFAULT_PROVIDER', 'groq'),
     'default_for_images' => 'gemini',
     'default_for_audio' => 'openai',
     'default_for_transcription' => 'openai',
@@ -101,6 +101,13 @@ return [
         'groq' => [
             'driver' => 'groq',
             'key' => env('GROQ_API_KEY'),
+            'models' => [
+                'text' => [
+                    'default' => env('GROQ_MODEL', 'meta-llama/llama-4-scout-17b-16e-instruct'),
+                    'cheapest' => 'llama-3.1-8b-instant',
+                    'smartest' => 'meta-llama/llama-4-scout-17b-16e-instruct',
+                ],
+            ],
         ],
 
         'jina' => [

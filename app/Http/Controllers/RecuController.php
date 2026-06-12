@@ -36,6 +36,14 @@ class RecuController extends Controller
         return view('recus.index', compact('recus', 'totalTraite', 'enAttente', 'echoue'));
     }
 
+    public function statuts()
+    {
+        $recus = Recu::where('user_id', auth()->id())
+            ->get(['id', 'statut']);
+
+        return response()->json(['recus' => $recus]);
+    }
+
     public function create()
     {
         $this->authorize('create', Recu::class);
@@ -85,10 +93,13 @@ class RecuController extends Controller
         $this->authorize('update', $recu);
 
         $data = [];
+        $shouldReprocess = false;
 
-        if ($request->filled('texte_brut')) {
+        if ($request->has('texte_brut')) {
             $data['texte_brut'] = $request->texte_brut;
-            $data['statut'] = StatutRecu::EnAttente;
+            if ($recu->texte_brut !== $request->texte_brut) {
+                $shouldReprocess = true;
+            }
         }
 
         if ($request->hasFile('image')) {
@@ -98,12 +109,25 @@ class RecuController extends Controller
 
             $path = $request->file('image')->store('recus/' . $recu->id, 'public');
             $data['image_path'] = $path;
+
+            if (!$request->filled('texte_brut')) {
+                $data['texte_brut'] = null;
+            }
+            $shouldReprocess = true;
         } elseif ($request->boolean('supprimer_image') && $recu->image_path) {
             Storage::disk('public')->delete($recu->image_path);
             $data['image_path'] = null;
         }
 
+        if ($shouldReprocess) {
+            $data['statut'] = StatutRecu::EnAttente;
+        }
+
         $recu->update($data);
+
+        if ($shouldReprocess) {
+            ExtraireDepensesDuRecu::dispatch($recu);
+        }
 
         return redirect()->route('recus.show', $recu)
             ->with('success', 'Reçu mis à jour avec succès.');

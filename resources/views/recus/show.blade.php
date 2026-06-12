@@ -2,7 +2,7 @@
 
 @section('title', 'Assistant Dépenses - Détail du Reçu')
 @section('page-title', 'Détail du Reçu #' . $recu->id)
-@section('search', false)
+
 
 @section('content')
     @if (session('success'))
