@@ -5,6 +5,13 @@
 @section('search', false)
 
 @section('content')
+    @if (session('success'))
+        <div class="mb-lg p-md bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg flex items-center gap-md">
+            <span class="material-symbols-outlined text-green-600" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
         <section class="lg:col-span-7 flex flex-col gap-lg">
             <form method="POST" action="{{ route('recus.update', $recu->id) }}" enctype="multipart/form-data" class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant shadow-sm flex flex-col h-full">
@@ -58,16 +65,25 @@
                         <img src="{{ Storage::url($recu->image_path) }}" alt="Reçu actuel" class="w-full rounded-lg border border-outline-variant mb-sm">
                         <p class="text-xs text-on-surface-variant">Image actuelle. Téléchargez un nouveau fichier pour la remplacer.</p>
                     </div>
+                    <div class="mb-md flex items-center gap-md p-md bg-error/5 border border-error/20 rounded-lg">
+                        <input type="checkbox" id="removeImage" name="supprimer_image" value="1" class="rounded border-error text-error focus:ring-error">
+                        <label for="removeImage" class="text-sm text-error cursor-pointer">Supprimer l'image</label>
+                    </div>
                 @endif
 
-                <label for="fileInput" class="border-2 border-dashed border-outline-variant rounded-xl p-xl flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary hover:bg-primary-fixed/20 transition-all group relative overflow-hidden">
+                <div id="uploadZone" class="border-2 border-dashed border-outline-variant rounded-xl p-xl flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary hover:bg-primary-fixed/20 transition-all group relative overflow-hidden">
                     <input accept="image/png,image/jpeg,image/webp" class="hidden" id="fileInput" name="image" type="file">
-                    <div>
+                    <div id="uploadPlaceholder">
                         <span class="material-symbols-outlined text-5xl text-outline group-hover:text-primary transition-colors mb-sm">upload_file</span>
-                        <p class="text-lg text-on-surface mb-xs">{{ $recu->image_path ? 'Remplacer l\'image' : 'Sélectionnez un fichier' }}</p>
+                        <p class="text-lg text-on-surface mb-xs">{{ $recu->image_path ? "Remplacer l'image" : 'Sélectionnez un fichier' }}</p>
                         <p class="text-sm text-on-surface-variant">PNG, JPG ou WebP (max 10MB)</p>
                     </div>
-                </label>
+                    <div id="uploadPreview" class="hidden w-full">
+                        <img id="previewImage" class="max-h-48 mx-auto rounded-lg border border-outline-variant mb-sm" src="#" alt="Aperçu">
+                        <p id="fileInfo" class="text-sm text-on-surface-variant mb-sm"></p>
+                        <button type="button" id="removeSelection" class="text-xs text-error hover:underline">Supprimer la sélection</button>
+                    </div>
+                </div>
 
                 <div class="mt-lg space-y-md">
                     <div class="flex items-center gap-md p-md bg-surface-container-low rounded-lg">
@@ -79,25 +95,12 @@
 
             <div class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant shadow-sm">
                 <h3 class="text-lg font-medium text-primary mb-md">Statut actuel</h3>
-                @switch($recu->statut)
-                    @case('en_attente')
-                        <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-yellow-100 text-yellow-700 border-yellow-200">
-                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 me-2"></span> En attente
-                        </span>
-                    @break
-                    @case('traite')
-                        <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-green-100 text-green-700 border-green-200">
-                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 me-2"></span> Traité
-                        </span>
-                    @break
-                    @case('echoue')
-                        <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-red-100 text-red-700 border-red-200">
-                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 me-2"></span> Échoué
-                        </span>
-                    @break
-                @endswitch
+                @include('recus._statut_badge', ['statut' => $recu->statut->value])
                 <p class="text-xs text-on-surface-variant mt-sm">Le statut repasse à "En attente" si vous modifiez le texte brut.</p>
             </div>
         </section>
     </div>
+@push('scripts')
+    @include('recus._upload_js')
+@endpush
 @endsection

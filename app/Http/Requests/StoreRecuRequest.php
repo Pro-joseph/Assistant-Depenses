@@ -27,4 +27,16 @@ class StoreRecuRequest extends FormRequest
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240', 'required_without:texte_brut'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'texte_brut.required_without' => 'Le texte brut est obligatoire si aucune image n\'est fournie.',
+            'image.required_without' => 'L\'image est obligatoire si aucun texte brut n\'est fourni.',
+            'image.image' => 'Le fichier doit être une image.',
+            'image.mimes' => 'L\'image doit être au format JPG, PNG ou WebP.',
+            'image.max' => 'L\'image ne doit pas dépasser 10 Mo.',
+            'texte_brut.max' => 'Le texte brut ne doit pas dépasser 10 000 caractères.',
+        ];
+    }
 }

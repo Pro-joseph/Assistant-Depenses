@@ -12,7 +12,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::redirect('/dashboard', '/depenses')->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -20,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('recus', RecuController::class);
+    Route::delete('recus/{recu}/image', [RecuController::class, 'destroyImage'])->name('recus.image.destroy');
     Route::resource('depenses', DepenseController::class)->only(['index']);
 });
 

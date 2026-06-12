@@ -13,17 +13,27 @@ use Illuminate\Support\Facades\Storage;
 
 class RecuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Recu::class);
 
-        $recus = Recu::where('user_id', auth()->id())
+        $userId = auth()->id();
+
+        $recus = Recu::where('user_id', $userId)
             ->with('depenses')
             ->withCount('depenses')
+            ->when($request->q, fn ($q, $search) => $q->where(function ($q) use ($search) {
+                $q->where('texte_brut', 'like', "%{$search}%")
+                  ->orWhere('id', $search);
+            }))
             ->latest()
             ->paginate(10);
 
-        return view('recus.index', compact('recus'));
+        $totalTraite = Recu::where('user_id', $userId)->where('statut', 'traite')->count();
+        $enAttente = Recu::where('user_id', $userId)->where('statut', 'en_attente')->count();
+        $echoue = Recu::where('user_id', $userId)->where('statut', 'echoue')->count();
+
+        return view('recus.index', compact('recus', 'totalTraite', 'enAttente', 'echoue'));
     }
 
     public function create()
@@ -88,12 +98,31 @@ class RecuController extends Controller
 
             $path = $request->file('image')->store('recus/' . $recu->id, 'public');
             $data['image_path'] = $path;
+        } elseif ($request->boolean('supprimer_image') && $recu->image_path) {
+            Storage::disk('public')->delete($recu->image_path);
+            $data['image_path'] = null;
         }
 
         $recu->update($data);
 
         return redirect()->route('recus.show', $recu)
             ->with('success', 'Reçu mis à jour avec succès.');
+    }
+
+    public function destroyImage(Recu $recu)
+    {
+        $this->authorize('update', $recu);
+
+        if (is_null($recu->image_path)) {
+            abort(404);
+        }
+
+        Storage::disk('public')->delete($recu->image_path);
+
+        $recu->update(['image_path' => null]);
+
+        return redirect()->back()
+            ->with('success', 'Image supprimée avec succès.');
     }
 
     public function destroy(Recu $recu)

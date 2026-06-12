@@ -61,7 +61,7 @@
                     @endif
                 </div>
                 <div class="flex items-center gap-md">
-                    <span class="text-sm text-on-surface-variant cursor-pointer hover:text-secondary transition-colors">Mon Profil</span>
+                    <a href="{{ route('profile.edit') }}" class="text-sm text-on-surface-variant hover:text-secondary transition-colors">Mon Profil</a>
                     <div class="h-8 w-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold overflow-hidden border border-outline-variant">
                         <span class="material-symbols-outlined text-sm">person</span>
                     </div>
@@ -78,5 +78,7 @@
         <div class="absolute top-1/4 right-0 w-96 h-96 bg-primary-fixed blur-[120px] rounded-full"></div>
         <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary-fixed blur-[100px] rounded-full"></div>
     </div>
+
+    @stack('scripts')
 </body>
 </html>

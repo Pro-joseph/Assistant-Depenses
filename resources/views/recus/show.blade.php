@@ -5,6 +5,13 @@
 @section('search', false)
 
 @section('content')
+    @if (session('success'))
+        <div class="mb-lg p-md bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg flex items-center gap-md">
+            <span class="material-symbols-outlined text-green-600" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
         <section class="lg:col-span-7 flex flex-col gap-lg">
             <div class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant shadow-sm">
@@ -13,27 +20,7 @@
                         <h3 class="text-lg font-medium text-primary">Informations</h3>
                         <p class="text-xs text-on-surface-variant mt-xs">{{ $recu->created_at->format('d/m/Y H:i') }}</p>
                     </div>
-                    @switch($recu->statut)
-                        @case('en_attente')
-                            <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-yellow-100 text-yellow-700 border-yellow-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 me-2"></span> En attente
-                            </span>
-                        @break
-                        @case('traite')
-                            <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-green-100 text-green-700 border-green-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 me-2"></span> Traité
-                            </span>
-                        @break
-                        @case('echoue')
-                            <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-red-100 text-red-700 border-red-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 me-2"></span> Échoué
-                            </span>
-                        @break
-                        @default
-                            <span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-gray-100 text-gray-700 border-gray-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-gray-500 me-2"></span> {{ $recu->statut }}
-                            </span>
-                    @endswitch
+                    @include('recus._statut_badge', ['statut' => $recu->statut->value])
                 </div>
 
                 @if ($recu->total_estime)

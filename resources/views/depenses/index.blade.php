@@ -128,45 +128,7 @@
             </table>
         </div>
 
-        @if ($depenses->count())
-            <div class="px-lg py-md border-t border-outline-variant bg-surface-container-low/30 flex justify-between items-center">
-                <span class="text-xs text-on-surface-variant">
-                    Affichage de {{ $depenses->firstItem() }} à {{ $depenses->lastItem() }}
-                    sur {{ $depenses->total() }} dépenses
-                </span>
-                <div class="flex gap-sm">
-                    @if ($depenses->onFirstPage())
-                        <button class="p-xs rounded-lg hover:bg-surface-variant text-outline opacity-30" disabled>
-                            <span class="material-symbols-outlined">chevron_left</span>
-                        </button>
-                    @else
-                        <a href="{{ $depenses->previousPageUrl() }}" class="p-xs rounded-lg hover:bg-surface-variant text-outline flex items-center">
-                            <span class="material-symbols-outlined">chevron_left</span>
-                        </a>
-                    @endif
-
-                    @foreach ($depenses->getUrlRange(1, $depenses->lastPage()) as $page => $url)
-                        <a href="{{ $url }}"
-                            class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-medium
-                        {{ $page == $depenses->currentPage()
-                            ? 'bg-primary text-on-primary font-bold'
-                            : 'hover:bg-surface-variant text-primary' }}">
-                            {{ $page }}
-                        </a>
-                    @endforeach
-
-                    @if ($depenses->hasMorePages())
-                        <a href="{{ $depenses->nextPageUrl() }}" class="p-xs rounded-lg hover:bg-surface-variant text-outline flex items-center">
-                            <span class="material-symbols-outlined">chevron_right</span>
-                        </a>
-                    @else
-                        <button class="p-xs rounded-lg hover:bg-surface-variant text-outline opacity-30" disabled>
-                            <span class="material-symbols-outlined">chevron_right</span>
-                        </button>
-                    @endif
-                </div>
-            </div>
-        @endif
+        @include('partials.pagination', ['paginator' => $depenses, 'label' => 'dépenses'])
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-lg mt-xxl">
