@@ -1,8 +1,10 @@
 <?php
 
+use App\Enums\StatutRecu;
 use App\Models\Recu;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -41,6 +43,8 @@ test('user cannot see other users recus in their list', function () {
 });
 
 test('user can create a recu with text only', function () {
+    Queue::fake();
+
     $this->actingAs($this->user)
         ->post(route('recus.store'), [
             'texte_brut' => 'CARREFOUR CITY Total: 42.50€',
@@ -144,7 +148,7 @@ test('user can update their own recu text', function () {
 
     $recu->refresh();
     expect($recu->texte_brut)->toBe('Updated text');
-    expect($recu->statut)->toBe('en_attente');
+    expect($recu->statut)->toBe(StatutRecu::EnAttente);
 });
 
 test('user can update their own recu image', function () {

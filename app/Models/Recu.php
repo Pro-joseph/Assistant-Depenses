@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatutRecu;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,11 @@ class Recu extends Model
         'payload_brut',
         'total_estime',
         'devise',
+    ];
+
+    protected $casts = [
+        'statut' => StatutRecu::class,
+        'payload_brut' => 'array',
     ];
 
     public function user(): BelongsTo

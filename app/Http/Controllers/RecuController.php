@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StatutRecu;
+use App\Jobs\ExtraireDepensesDuRecu;
 use App\Models\Recu;
 use App\Http\Requests\StoreRecuRequest;
 use App\Http\Requests\UpdateRecuRequest;
@@ -38,7 +40,7 @@ class RecuController extends Controller
         $recu = Recu::create([
             'user_id' => auth()->id(),
             'texte_brut' => $request->texte_brut,
-            'statut' => 'en_attente',
+            'statut' => StatutRecu::EnAttente,
         ]);
 
         if ($request->hasFile('image')) {
@@ -46,10 +48,7 @@ class RecuController extends Controller
             $recu->update(['image_path' => $path]);
         }
 
-        $job = 'App\\Jobs\\ExtraireDepensesDuRecu';
-        if (class_exists($job)) {
-            $job::dispatch($recu);
-        }
+        ExtraireDepensesDuRecu::dispatch($recu);
 
         return redirect()->route('recus.index')
             ->with('success', 'Reçu créé avec succès. L\'extraction des dépenses est en cours.');
@@ -79,7 +78,7 @@ class RecuController extends Controller
 
         if ($request->filled('texte_brut')) {
             $data['texte_brut'] = $request->texte_brut;
-            $data['statut'] = 'en_attente';
+            $data['statut'] = StatutRecu::EnAttente;
         }
 
         if ($request->hasFile('image')) {
