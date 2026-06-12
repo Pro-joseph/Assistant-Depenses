@@ -48,20 +48,20 @@
         </div>
     </aside>
 
-    <main class="ml-64 min-h-screen">
+    <main class="ms-64 min-h-screen">
         <header class="sticky top-0 bg-surface-container-lowest border-b border-outline-variant shadow-sm z-40">
             <div class="flex justify-between items-center px-lg py-sm max-w-[1440px] mx-auto">
                 <div class="flex items-center gap-lg">
                     <h2 class="text-xl font-bold text-primary">@yield('page-title', 'Assistant Dépenses')</h2>
                     @hasSection('search')
-                        <div class="hidden md:flex bg-surface-container-high rounded-full px-md py-xs items-center gap-sm border border-outline-variant">
+                        <form method="GET" action="{{ url()->current() }}" class="hidden md:flex bg-surface-container-high rounded-full px-md py-xs items-center gap-sm border border-outline-variant">
                             <span class="material-symbols-outlined text-outline text-sm">search</span>
-                            <input class="bg-transparent border-none focus:ring-0 text-sm w-64" type="text" placeholder="@yield('search-placeholder', 'Rechercher...')"/>
-                        </div>
+                            <input class="bg-transparent border-none focus:ring-0 text-sm w-64" type="text" name="q" value="{{ request('q') }}" placeholder="@yield('search-placeholder', 'Rechercher...')"/>
+                        </form>
                     @endif
                 </div>
                 <div class="flex items-center gap-md">
-                    <span class="text-sm text-on-surface-variant cursor-pointer hover:text-secondary transition-colors">Mon Profil</span>
+                    <a href="{{ route('profile.edit') }}" class="text-sm text-on-surface-variant hover:text-secondary transition-colors">Mon Profil</a>
                     <div class="h-8 w-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold overflow-hidden border border-outline-variant">
                         <span class="material-symbols-outlined text-sm">person</span>
                     </div>
@@ -78,5 +78,7 @@
         <div class="absolute top-1/4 right-0 w-96 h-96 bg-primary-fixed blur-[120px] rounded-full"></div>
         <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary-fixed blur-[100px] rounded-full"></div>
     </div>
+
+    @stack('scripts')
 </body>
 </html>

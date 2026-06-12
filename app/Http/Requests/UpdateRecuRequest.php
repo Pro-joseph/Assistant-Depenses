@@ -12,7 +12,7 @@ class UpdateRecuRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,8 @@ class UpdateRecuRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'texte_brut' => ['nullable', 'string', 'max:10000'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
         ];
     }
 }

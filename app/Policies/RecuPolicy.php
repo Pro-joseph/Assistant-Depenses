@@ -13,7 +13,7 @@ class RecuPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class RecuPolicy
      */
     public function view(User $user, Recu $recu): bool
     {
-        return false;
+        return $user->id === $recu->user_id;
     }
 
     /**
@@ -29,7 +29,7 @@ class RecuPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class RecuPolicy
      */
     public function update(User $user, Recu $recu): bool
     {
-        return false;
+        return $user->id === $recu->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class RecuPolicy
      */
     public function delete(User $user, Recu $recu): bool
     {
-        return false;
+        return $user->id === $recu->user_id;
     }
 
     /**
