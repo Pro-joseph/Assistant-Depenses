@@ -20,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('recus', RecuController::class);
+    Route::get('recus/statuts', [RecuController::class, 'statuts'])->name('recus.statuts');
     Route::delete('recus/{recu}/image', [RecuController::class, 'destroyImage'])->name('recus.image.destroy');
     Route::resource('depenses', DepenseController::class)->only(['index']);
 });

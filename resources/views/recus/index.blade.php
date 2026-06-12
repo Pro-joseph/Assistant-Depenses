@@ -69,7 +69,7 @@
                 </thead>
                 <tbody class="divide-y divide-outline-variant">
                     @forelse ($recus as $recu)
-                        <tr class="hover:bg-surface-container-low transition-colors group">
+                        <tr class="hover:bg-surface-container-low transition-colors group" data-recu-id="{{ $recu->id }}">
                             <td class="px-lg py-md">
                                 @if ($recu->image_path)
                                     <img src="{{ Storage::url($recu->image_path) }}" alt="" class="w-10 h-10 rounded-lg object-cover border border-outline-variant">
@@ -79,7 +79,7 @@
                             </td>
                             <td class="px-lg py-md text-sm text-on-surface">{{ $recu->created_at->format('d/m/Y') }}</td>
                             <td class="px-lg py-md text-sm font-medium text-primary">Reçu #{{ $recu->id }}</td>
-                            <td class="px-lg py-md">@include('recus._statut_badge', ['statut' => $recu->statut->value])</td>
+                            <td class="px-lg py-md"><span class="statut-badge" data-statut="{{ $recu->statut->value }}">@include('recus._statut_badge', ['statut' => $recu->statut->value])</span></td>
                             <td class="px-lg py-md text-sm text-on-surface-variant">{{ $recu->depenses_count }} dépense{{ $recu->depenses_count > 1 ? 's' : '' }}</td>
                             <td class="px-lg py-md text-end">
                                 <div class="flex justify-end gap-md opacity-0 group-hover:opacity-100 transition-opacity">
@@ -117,4 +117,43 @@
         </div>
         @include('partials.pagination', ['paginator' => $recus, 'label' => 'reçus'])
     </div>
+@push('scripts')
+    <script>
+        const badgeHTML = {
+            en_attente: '<span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-yellow-100 text-yellow-700 border-yellow-200"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500 me-2"></span> En attente</span>',
+            traite: '<span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-green-100 text-green-700 border-green-200"><span class="w-1.5 h-1.5 rounded-full bg-green-500 me-2"></span> Traité</span>',
+            echoue: '<span class="inline-flex items-center px-sm py-xs rounded-full text-xs font-medium border bg-red-100 text-red-700 border-red-200"><span class="w-1.5 h-1.5 rounded-full bg-red-500 me-2"></span> Échoué</span>',
+        };
+
+        function pollStatuts() {
+            const rows = document.querySelectorAll('[data-recu-id]');
+            if (!rows.length) return;
+
+            fetch('{{ route("recus.statuts") }}')
+                .then(r => r.json())
+                .then(data => {
+                    data.recus.forEach(recu => {
+                        const row = document.querySelector(`[data-recu-id="${recu.id}"]`);
+                        if (!row) return;
+                        const badge = row.querySelector('.statut-badge');
+                        if (!badge) return;
+                        if (badge.dataset.statut === 'en_attente' && recu.statut !== 'en_attente') {
+                            badge.dataset.statut = recu.statut;
+                            badge.innerHTML = badgeHTML[recu.statut] || badgeHTML.echoue;
+                        }
+                    });
+
+                    const enAttente = data.recus.filter(r => r.statut === 'en_attente').length;
+                    const badge = document.querySelector('[data-statut="en_attente"]');
+                    if (!enAttente && !badge) {
+                        clearInterval(pollInterval);
+                    }
+                })
+                .catch(() => {});
+        }
+
+        const pollInterval = setInterval(pollStatuts, 5000);
+        pollStatuts();
+    </script>
+@endpush
 @endsection

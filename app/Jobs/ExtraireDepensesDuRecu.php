@@ -5,11 +5,13 @@ namespace App\Jobs;
 use App\Enums\StatutRecu;
 use App\Models\Depense;
 use App\Models\Recu;
+use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Laravel\Ai\Exceptions\AiException;
+use Laravel\Ai\Files\Image;
 use Laravel\Ai\StructuredAnonymousAgent;
 
 class ExtraireDepensesDuRecu implements ShouldQueue
@@ -25,7 +27,13 @@ class ExtraireDepensesDuRecu implements ShouldQueue
 
     public function handle(): void
     {
-        if (is_null($this->recu->texte_brut)) {
+        $text = $this->recu->texte_brut;
+
+        if (empty(trim($text ?? '')) && $this->recu->image_path) {
+            $text = $this->ocrDepuisImage();
+        }
+
+        if (empty(trim($text ?? ''))) {
             $this->recu->update(['statut' => StatutRecu::Echoue]);
 
             return;
@@ -35,7 +43,7 @@ class ExtraireDepensesDuRecu implements ShouldQueue
             instructions: 'Tu es un assistant spécialisé dans l\'extraction de données de reçus de caisse. Extrais les articles listés sur le reçu écrit en Darija. Réponds UNIQUEMENT avec du JSON valide correspondant au schéma fourni. Le champ "catégorie" doit être l\'un de : alimentaire, boissons, hygiene, entretien, autre.',
             messages: [],
             tools: [],
-            schema: fn (\Illuminate\Contracts\JsonSchema\JsonSchema $schema) => [
+            schema: fn (JsonSchema $schema) => [
                 'articles' => $schema->array()->items(
                     $schema->object([
                         'libellé' => $schema->string()->required(),
@@ -52,11 +60,13 @@ class ExtraireDepensesDuRecu implements ShouldQueue
         );
 
         try {
-            $response = $agent->prompt($this->recu->texte_brut);
+            $response = $agent->prompt($text);
 
             $data = $response->structured;
 
             DB::transaction(function () use ($data) {
+                $this->recu->depenses()->delete();
+
                 foreach ($data['articles'] as $article) {
                     Depense::create([
                         'recu_id' => $this->recu->id,
@@ -82,6 +92,43 @@ class ExtraireDepensesDuRecu implements ShouldQueue
             Log::error('Erreur inattendue lors de l\'extraction IA pour le recu #' . $this->recu->id . ': ' . $e->getMessage());
 
             $this->recu->update(['statut' => StatutRecu::Echoue]);
+        }
+    }
+
+    private function ocrDepuisImage(): ?string
+    {
+        $ocrAgent = new StructuredAnonymousAgent(
+            instructions: 'Tu es un assistant OCR spécialisé dans l\'extraction de texte de reçus de caisse. Extrais TOUT le texte visible sur ce reçu, ligne par ligne. Conserve la langue originale (Darija, français, arabe). Ne modifie pas les montants ni les noms de produits.',
+            messages: [],
+            tools: [],
+            schema: fn (JsonSchema $schema) => [
+                'texte_complet' => $schema->string()->required(),
+            ],
+        );
+
+        try {
+            $response = $ocrAgent->prompt(
+                'Extrais tout le texte visible sur ce reçu.',
+                [Image::fromStorage($this->recu->image_path, 'public')],
+                null,
+                env('GROQ_VISION_MODEL', 'meta-llama/llama-4-scout-17b-16e-instruct'),
+            );
+
+            $ocrText = $response->structured['texte_complet'];
+
+            $this->recu->update([
+                'texte_brut' => $ocrText,
+            ]);
+
+            return $ocrText;
+        } catch (AiException $e) {
+            Log::error('OCR échoué pour le recu #' . $this->recu->id . ': ' . $e->getMessage());
+
+            return null;
+        } catch (\Throwable $e) {
+            Log::error('Erreur inattendue lors de l\'OCR pour le recu #' . $this->recu->id . ': ' . $e->getMessage());
+
+            return null;
         }
     }
 }
